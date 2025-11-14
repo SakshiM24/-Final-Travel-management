@@ -6,9 +6,29 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('enroll/', views.enroll, name='enroll'),
     path('exit/', views.exit_view, name='exit'),
+    path('thank-you/', views.thank_you, name='thank_you'),
+    path('exit-thank-you/', views.exit_thank_you, name='exit_thank_you'),
+
     path('rules/', views.rules, name='rules'),
     path('buses/', views.buses_view, name='buses'),
-    path('test-email/', views.test_email, name='test_email'),
+    path('buspass_template/', views.buspass_template, name='buspass_template'),
+    path('approve/<int:employee_id>/', views.approve_employee, name='approve_employee'),
+    
+
+
+
+
+
+ 
+    #new
+    path('admin-dashboard/', views.admin_enrollment, name='admin_dashboard'),
+    path('exit-requests/', views.exit_requests, name='exit_requests'),
+    path('addbuses/', views.bus_manage, name='bus_manage'),
+
+
+
+
+    
 
  
 
@@ -26,15 +46,22 @@ urlpatterns = [
     #logs
     path('logs/', views.view_logs, name='view_logs'),
 
+
+   
+
     
     # Actions (use POST forms from templates)
+
+    
     path('enrollment/update/<int:pk>/', views.update_enrollment_status, name='update_enrollment_status'),
     path('exit/update/<int:pk>/', views.update_exit_status, name='update_exit_status'),
+    
+
 
     # stops
-path('stop/add/', views.add_stop, name='add_stop'),
-path('stop/edit/<int:pk>/', views.edit_stop, name='edit_stop'),
-path('stop/delete/<int:pk>/', views.delete_stop, name='delete_stop'),
+    path('stop/add/', views.add_stop, name='add_stop'),
+    path('stop/edit/<int:pk>/', views.edit_stop, name='edit_stop'),
+    path('stop/delete/<int:pk>/', views.delete_stop, name='delete_stop'),
 
 
 # logins (admin accounts)
@@ -43,12 +70,18 @@ path('manage-logins/add/', views.add_admin, name='add_admin'),
 path('manage-logins/delete/<int:pk>/', views.delete_admin, name='delete_admin'),
 
 
-path('admin/enrollment/<int:pk>/update/', views.update_enrollment_status, name='update_enrollment_status'),
-path('admin/exit/<int:pk>/update/', views.update_exit_status, name='update_exit_status'),
+
 
  path('dashboard/', views.dashboard, name='dashboard'),
+
+
+# FAQ view
+  #path('faq/', views.faq_view, name='faq'),
+  #path('faq/delete/<int:id>/', views.delete_faq, name='delete_faq'),
     
-   
-   
+
+# Ask a question
+path("ask_question/", views.ask_question, name="ask_question"),
+
 
 ]

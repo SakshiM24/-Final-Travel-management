@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.hashers import make_password, check_password
 
 # --------------------------
-# 1️⃣ Stop Model
+# 1️ Stop Model
 # --------------------------
 class Stop(models.Model):
     name = models.CharField(max_length=100)
@@ -15,7 +15,7 @@ class Stop(models.Model):
 
 # --------------------------
 
-# 2️⃣ Bus Model
+# 2️ Bus Model
 # --------------------------
 class Bus(models.Model):
     STATUS_CHOICES = [
@@ -35,7 +35,7 @@ class Bus(models.Model):
 
 
 # --------------------------
-# 3️⃣ Enrollment Request Model
+# 3️ Enrollment Request Model
 # --------------------------
 class EnrollmentRequest(models.Model):
     ROLE_CHOICES = [('Employee', 'Employee'), ('Intern', 'Intern')]
@@ -60,13 +60,15 @@ class EnrollmentRequest(models.Model):
     working_type = models.CharField(max_length=50)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     applied_at = models.DateTimeField(default=timezone.now)
+    pass_no = models.CharField(max_length=20, unique=True, blank=True, null=True)  #  add this
+
 
     def __str__(self):
         return f"{self.name} ({self.role}) - {self.status}"
 
 
 # --------------------------
-# 4️⃣ Exit Request Model
+# 4️ Exit Request Model
 # --------------------------
 class ExitRequest(models.Model):
     STATUS_CHOICES = [('Pending', 'Pending'), ('Accepted', 'Accepted'), ('Rejected', 'Rejected')]
@@ -93,7 +95,7 @@ class ExitRequest(models.Model):
 
 class AdminUser(models.Model):
     username = models.CharField(max_length=50, unique=True)
-    password_hash = models.CharField(max_length=128)  # store hashed password
+    password_hash = models.CharField(max_length=128)  # store hashed password    
     full_name = models.CharField(max_length=100, blank=True, null=True)
     is_superadmin = models.BooleanField(default=False)  # main admin flag
     created_at = models.DateTimeField(default=timezone.now)
@@ -118,3 +120,48 @@ class ActionLog(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"{self.performed_by} - {self.action[:30]}"
+    
+
+from django.db import models
+
+class FAQQuestion(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    question = models.TextField()
+    asked_at = models.DateTimeField(auto_now_add=True)
+    is_answered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.name} - {self.question[:40]}"
+    
+
+from django.db import models
+class EmployeeQuestion(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    question = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.email} - {self.question_text[:30]}"
+    
+
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
+@receiver(pre_save, sender=EnrollmentRequest)
+def generate_pass_no(sender, instance, **kwargs):
+    # Only generate if it’s not already set
+    if not instance.pass_no:
+        last_pass = EnrollmentRequest.objects.all().order_by('id').last()
+        if last_pass and last_pass.pass_no:
+            # Extract number from last pass (e.g., EP005 → 5)
+            try:
+                last_num = int(last_pass.pass_no.replace("EP", ""))
+            except:
+                last_num = 0
+        else:
+            last_num = 0
+        
+        new_pass_no = f"EP{last_num + 1:03d}"  # formats like EP001, EP002
+        instance.pass_no = new_pass_no

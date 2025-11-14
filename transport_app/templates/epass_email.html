@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <body style="font-family: Arial, sans-serif; line-height: 1.6;">
+    <h2 style="color: #004aad;">Aequs Transport Department</h2>
+    <p>Dear {{ name }},</p>
+    <p>Your bus enrollment form has been <strong>accepted</strong>.</p>
+
+    <h3 style="color: #007bff;">E-PASS Details:</h3>
+    <table style="border-collapse: collapse; width: 100%;">
+      <tr><td><b>Pass No:</b></td><td>{{ pass_no }}</td></tr>
+      <tr><td><b>Name:</b></td><td>{{ name }}</td></tr>
+      <tr><td><b>Employee ID:</b></td><td>{{ emp_id }}</td></tr>
+      <tr><td><b>Entity:</b></td><td>{{ entity }}</td></tr>
+      <tr><td><b>Pickup/Drop Point:</b></td><td>{{ pickup_drop_point }}</td></tr>
+    </table>
+
+    <p>You can download or show this e-pass while boarding the bus.</p>
+
+    <p>Regards,<br>
+    Transport Department<br>
+    Aequs Pvt. Ltd.</p>
+  </body>
+</html>

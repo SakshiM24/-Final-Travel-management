@@ -1,0 +1,101 @@
+{% extends 'admin_dashboard.html' %}
+{% block content %}
+<header class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Exit Requests</h1>
+</header>
+ 
+
+
+
+<!-- EXIT -->
+<section id="exit-section" class="mb-10">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-lg font-semibold">Exit Requests</h2>
+
+    <!-- search -->
+    <form method="get" class="flex gap-2">
+      <input type="text" name="exit_search" placeholder="Search name or emp id"
+             value="{{ request.GET.exit_search|default:'' }}"
+             class="px-3 py-2 border rounded" />
+      <input type="text" name="exit_role" placeholder="department"
+             value="{{ request.GET.exit_role|default:'' }}"
+             class="px-3 py-2 border rounded" />
+      <button type="submit" class="bg-blue-600 text-white px-3 py-2 rounded">Search</button>
+    </form>
+  </div>
+
+  <div class="bg-white shadow rounded-lg overflow-hidden">
+    <table class="min-w-full">
+      <thead class="bg-blue-100">
+        <tr>
+          <th class="text-left px-4 py-3">Name</th>
+          <th class="text-left px-4 py-3">Entity</th>
+          <th class="text-left px-4 py-3">Department</th>
+          <th class="text-left px-4 py-3">Bus No</th>
+          <th class="text-left px-4 py-3">Applied</th>
+          <th class="text-left px-4 py-3">Status</th>
+          <th class="px-4 py-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in exit_requests %}
+        <tr class="border-t" data-exit-row>
+          <td class="px-4 py-3">{{ r.employee_name }}</td>
+          <td class="px-4 py-3">{{ r.entity }}</td>
+          <td class="px-4 py-3">{{ r.department }}</td>
+          <td class="px-4 py-3">{{ r.bus_no|default:'—' }}</td>
+          <td class="px-4 py-3 text-sm text-gray-500">{{ r.applied_at|date:"d M Y H:i" }}</td>
+          <td class="px-4 py-3">
+            {% if r.status == 'Pending' %}
+              <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded">{{ r.status }}</span>
+            {% elif r.status == 'Accepted' %}
+              <span class="px-2 py-1 bg-green-100 text-green-800 rounded">{{ r.status }}</span>
+            {% else %}
+              <span class="px-2 py-1 bg-red-100 text-red-800 rounded">{{ r.status }}</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 flex gap-2">
+            <form method="post" action="{% url 'update_exit_status' r.pk %}" onsubmit="return handleExitAction(event, this)">
+              {% csrf_token %}
+              <input type="hidden" name="status" value="Accepted" />
+              <button class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">Accept</button>
+            </form>
+
+            <form method="post" action="{% url 'update_exit_status' r.pk %}" onsubmit="return handleExitAction(event, this)">
+              {% csrf_token %}
+              <input type="hidden" name="status" value="Rejected" />
+              
+              <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Reject</button>
+             
+            </form>
+
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="p-4 text-center text-gray-500">No exit requests yet</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+function handleExitAction(event, form) {
+  event.preventDefault();
+  if (!confirm("Are you sure?")) return false;
+  const row = form.closest("[data-exit-row]");
+  row.style.opacity = "0.5";
+  fetch(form.action, { method: "POST", body: new FormData(form) })
+    .then(res => {
+      if (res.ok) {
+        row.style.transition = "opacity 0.3s ease";
+        setTimeout(() => row.remove(), 400);
+      }
+    });
+  return false;  
+}
+</script>
+
+
+
+{% endblock %}

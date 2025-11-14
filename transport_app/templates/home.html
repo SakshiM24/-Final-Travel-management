@@ -1,106 +1,191 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Aequs Transport{% endblock %}
+{% block title %}Aequs Transport{% endblock %}
 
 {% block content %}
 
 <!-- NAVBAR -->
-<header class="w-full bg-white shadow-md fixed top-0 z-50">
-    <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
-        <!-- Logo -->
-        <div class="flex items-center space-x-2">
-            <img src="{% static 'images/AEQUS_logo.svg.png' %}" alt="Logo" class="h-12">
-            <span class="font-bold text-xl text-gray-800">
-</span>
-        </div>
-
-        <!-- Navbar Links -->
-        <nav>
-            <ul class="flex space-x-6 text-gray-700 font-medium items-center">
-                <div class="flex gap-6">
-    <a href="{% url 'enroll' %}" 
-       class="nav-link bg-blue-100 hover:bg-blue-500  font-semibold px-4 py-2 rounded-xl transition duration-300 flex items-center gap-2 shadow-sm">
-      <i class="fas fa-user-plus"></i> Enroll
-    </a>
-              
-    <a href="{% url 'exit' %}" 
-       class="nav-link bg-red-100 hover:bg-red-500 hover:text-white text-red-700 font-semibold px-4 py-2 rounded-xl transition duration-300 flex items-center gap-2 shadow-sm">
-      <i class="fas fa-sign-out-alt"></i> Exit
-    </a>
-
-     <a href="{% url 'buses' %}"
-
-       class="nav-link bg-green-100 hover:bg-green-500 hover:text-white text-green-700 font-semibold px-4 py-2 rounded-xl transition duration-300 flex items-center gap-2 shadow-sm">
-       <i class="fas fa-bus"></i> Buses
-       </a>
-
-       
-
-
-    <a href="{% url 'admin_dashboard' %}" 
-       class="nav-link bg-gray-100 hover:bg-gray-700 hover:text-white text-gray-800 font-semibold px-4 py-2 rounded-xl transition duration-300 flex items-center gap-2 shadow-sm">
-      <i class="fas fa-user-shield"></i> Admin
-    </a>
-  </div>
-            </ul>
-        </nav>
+<header class="w-full bg-white/90 backdrop-blur-md shadow-md fixed top-0 z-50 transition-all">
+  <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+    <!-- Logo -->
+    <div class="flex items-center space-x-2">
+      <img src="{% static 'images/AEQUS_logo.svg.png' %}" alt="Logo" class="h-12">
+      <span class="font-bold text-2xl text-gray-800 tracking-wide"></span>
     </div>
-</header>
 
+    <!-- Navbar Links -->
+    <nav>
+      <ul class="flex space-x-5 text-gray-700 font-medium items-center">
+        <div class="flex gap-6">
+          <a href="{% url 'enroll' %}" 
+             class="nav-link bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 font-semibold px-4 py-2 rounded-lg shadow-sm flex items-center gap-2 transition-all duration-300">
+             <i class="fas fa-user-plus"></i> Enroll
+          </a>
+          <a href="{% url 'exit' %}" 
+             class="nav-link bg-red-50 hover:bg-red-600 hover:text-white text-red-700 font-semibold px-4 py-2 rounded-lg shadow-sm flex items-center gap-2 transition-all duration-300">
+             <i class="fas fa-sign-out-alt"></i> Exit
+          </a>
+          <a href="{% url 'buses' %}" 
+             class="nav-link bg-green-50 hover:bg-green-600 hover:text-white text-green-700 font-semibold px-4 py-2 rounded-lg shadow-sm flex items-center gap-2 transition-all duration-300">
+             <i class="fas fa-bus"></i> Buses
+          </a>
+
+          <a href="{% url 'buspass_template' %}" 
+             class="nav-link bg-purple-50 hover:bg-purple-600 hover:text-white text-purple-700 font-semibold px-4 py-2 rounded-lg shadow-sm flex items-center gap-2 transition-all duration-300">
+             <i class="fas fa-id-card"></i> Bus Pass 
+          </a>
+
+          <a href="{% url 'admin_dashboard' %}" 
+             class="nav-link bg-gray-50 hover:bg-gray-700 hover:text-white text-gray-800 font-semibold px-4 py-2 rounded-lg shadow-sm flex items-center gap-2 transition-all duration-300">
+             <i class="fas fa-user-shield"></i> Admin
+          </a>
+        </div>
+      </ul>
+    </nav>
+  </div>
+</header>
 
 <!-- HERO SECTION -->
 <section class="w-full h-[70vh] relative mt-16">
-    <div id="carousel" class="absolute inset-0">
-        <img src="{% static 'images/aequs1.jpg' %}" class="slide active object-cover w-full h-full">
-        <img src="{% static 'images/aequs1.jpg' %}" class="slide object-cover w-full h-full">
-        <img src="{% static 'images/aequs1.jpg' %}" class="slide object-cover w-full h-full">
-    </div>
+  <div id="carousel" class="absolute inset-0">
+    <img src="{% static 'images/aequs1.jpg' %}" class="slide active object-cover w-full h-full">
+    <img src="{% static 'images/aequs1.jpg' %}" class="slide object-cover w-full h-full">
+    <img src="{% static 'images/aequs1.jpg' %}" class="slide object-cover w-full h-full">
+  </div>
 
-    <div class="absolute inset-0 bg-black/40"></div>
+  <div class="absolute inset-0 bg-black/50"></div>
 
-    <div class="relative z-10 flex flex-col justify-center items-center text-center text-white h-full px-4">
-        <h1 class="text-5xl md:text-6xl font-bold uppercase drop-shadow-lg">Aequs Transport</h1>
-        <p class="mt-4 text-lg md:text-xl max-w-2xl text-gray-200 drop-shadow">
-            Smooth, safe, and efficient commutes for every employee.
-        </p>
-    </div>
+  <div class="relative z-10 flex flex-col justify-center items-center text-center text-white h-full px-4">
+    <h1 class="text-5xl md:text-6xl font-extrabold tracking-wide drop-shadow-lg uppercase">Aequs Transport</h1>
+    <p class="mt-4 text-lg md:text-xl max-w-2xl text-gray-200 drop-shadow">
+      Smooth, safe, and efficient commutes for every employee.
+    </p>
+  </div>
 </section>
-
 
 <!-- QUICK ACCESS BOXES -->
-<section class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 my-16 px-4">
-    <a href="{% url 'enroll' %}" class="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-lg p-8 flex flex-col items-center transition">
-        <i class="fas fa-user-plus text-4xl mb-4"></i>
-        <h2 class="text-xl font-bold">Enroll</h2>
-        <p class="text-center mt-2">Register for company transport</p>
-    </a>
+<section class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 my-20 px-6">
+  <a href="{% url 'enroll' %}" class="group bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-xl shadow-lg p-10 flex flex-col items-center transition-transform hover:scale-105">
+    <i class="fas fa-user-plus text-4xl mb-4 group-hover:scale-110 transition"></i>
+    <h2 class="text-2xl font-semibold">Enroll</h2>
+    <p class="text-center mt-2 text-gray-100">Register for company transport</p>
+  </a>
 
-    <a href="{% url 'exit' %}" class="bg-red-600 hover:bg-red-700 text-white rounded-xl shadow-lg p-8 flex flex-col items-center transition">
-        <i class="fas fa-sign-out-alt text-4xl mb-4"></i>
-        <h2 class="text-xl font-bold">Exit</h2>
-        <p class="text-center mt-2">Mark your exit from transport</p>
-    </a>
+  <a href="{% url 'exit' %}" class="group bg-gradient-to-br from-red-600 to-red-700 text-white rounded-xl shadow-lg p-10 flex flex-col items-center transition-transform hover:scale-105">
+    <i class="fas fa-sign-out-alt text-4xl mb-4 group-hover:scale-110 transition"></i>
+    <h2 class="text-2xl font-semibold">Exit</h2>
+    <p class="text-center mt-2 text-gray-100">Mark your exit from transport</p>
+  </a>
 
-    <a href="{% url 'buses' %}" class="bg-green-600 hover:bg-green-700 text-white rounded-xl shadow-lg p-8 flex flex-col items-center transition">
-        <i class="fas fa-bus text-4xl mb-4"></i>
-        <h2 class="text-xl font-bold">View Buses</h2>
-        <p class="text-center mt-2">See available buses </p>
-    </a>
+  <a href="{% url 'buses' %}" class="group bg-gradient-to-br from-green-600 to-green-700 text-white rounded-xl shadow-lg p-10 flex flex-col items-center transition-transform hover:scale-105">
+    <i class="fas fa-bus text-4xl mb-4 group-hover:scale-110 transition"></i>
+    <h2 class="text-2xl font-semibold">View Buses</h2>
+    <p class="text-center mt-2 text-gray-100">See available buses</p>
+  </a>
 </section>
 
-<!-- FOOTER -->
-<footer class="bg-gray-900 text-gray-300 py-8 mt-16">
-    <div class="max-w-6xl mx-auto px-4 text-center md:text-left grid md:grid-cols-2 gap-4">
-        <div>
-            <h3 class="text-white font-bold text-lg">About Aequs Transport</h3>
-            <p class="mt-2 text-gray-400">
-                Aequs Transport provides safe, reliable, and efficient commute services to employees.
-            </p>
-        </div>
-        <div class="text-right text-gray-500">
-            &copy; 2025 Aequs Transport. All rights reserved.
-        </div>
+<!-- FAQ + ASK SECTION -->
+<section style="background-color: #121212; color: #f0f0f0; padding: 60px 100px; font-family: 'Poppins', sans-serif;">
+  <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 40px; text-align:left; color:#3b82f6; letter-spacing:1px;">
+    Frequently Asked Questions
+  </h2>
+
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 50px;">
+    
+    <!-- FAQ Section -->
+    <div class="faq-container" style="flex: 1; min-width: 420px; max-width: 580px;">
+      <div class="faq-item">
+        <button class="faq-question">Where do buses usually drop employees?<span class="arrow">▼</span></button>
+        <div class="faq-answer">Buses drop employees at the main company gate or designated route points.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Can I change my bus in case of emergency?<span class="arrow">▼</span></button>
+        <div class="faq-answer">Yes, you can request a change by contacting the transport administrator.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">What if my bus is delayed?<span class="arrow">▼</span></button>
+        <div class="faq-answer">You’ll receive a notification on your registered email if there’s a delay.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Can I enroll again after cancellation?<span class="arrow">▼</span></button>
+        <div class="faq-answer">Yes, you can submit a new request anytime using the employee portal.</div>
+      </div>
     </div>
+
+    <!-- Ask a Question Section -->
+    <form class="question-form" style="flex: 1; min-width: 380px; max-width: 500px; display: flex; flex-direction: column; background-color: #1e1e1e; padding: 35px 30px; border-radius: 12px; box-shadow: 0 0 25px rgba(59,130,246,0.2);">
+      <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 20px; color: #3b82f6; text-align:center;">Ask a Question</h3>
+      
+      <input type="text" placeholder="Enter your Name" required
+        style="padding: 12px; border: none; border-radius: 6px; margin-bottom: 12px; background-color: #2b2b2b; color: #fff;">
+      
+      <input type="email" placeholder="Enter your Email" required
+        style="padding: 12px; border: none; border-radius: 6px; margin-bottom: 12px; background-color: #2b2b2b; color: #fff;">
+      
+      <textarea placeholder="Type your question..." rows="4" required
+        style="padding: 12px; border: none; border-radius: 6px; background-color: #2b2b2b; color: #fff; resize: none;"></textarea>
+      
+      <button type="submit"
+        style="margin-top: 20px; align-self: center; padding: 10px 35px; background-color: #3b82f6; color: white; font-weight: 500; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s;">
+        Submit
+      </button>
+    </form>
+  </div>
+</section>
+
+<style>
+.faq-item {
+  border-bottom: 1px solid #2a2a2a;
+  padding: 14px 0;
+}
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  color: #f5f5f5;
+  font-size: 17px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+.faq-question:hover { color: #3b82f6; }
+.arrow { font-size: 14px; transition: transform 0.3s ease; }
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  color: #c0c0c0;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.faq-item.active .faq-answer { max-height: 130px; padding-top: 8px; }
+.faq-item.active .arrow { transform: rotate(180deg); }
+</style>
+
+<script>
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    item.classList.toggle('active');
+  });
+});
+</script>
+
+<!-- FOOTER -->
+<footer class="bg-grey-1000 text-gray-200 py-10 mt-0 border-t border-gray-800">
+  <div class="max-w-7xl mx-auto px-6 text-center md:text-left grid md:grid-cols-2 gap-6">
+    <div>
+      <h3 class="text-black font-semibold text-lg mb-2">About Aequs Transport</h3>
+      <p class="text-gray-600 leading-relaxed">Aequs Transport provides safe, reliable, and efficient commute services to employees.</p>
+    </div>
+    <div class="text-right text-gray-500 self-center">
+      &copy; 2025 Aequs Transport. All rights reserved.
+    </div>
+  </div>
 </footer>
 
 <!-- SLIDESHOW SCRIPT -->
@@ -108,21 +193,21 @@
 let slides = document.querySelectorAll('#carousel img');
 let current = 0;
 setInterval(() => {
-    slides[current].classList.remove('active');
-    current = (current + 1) % slides.length;
-    slides[current].classList.add('active');
+  slides[current].classList.remove('active');
+  current = (current + 1) % slides.length;
+  slides[current].classList.add('active');
 }, 5000);
 </script>
 
 <!-- SLIDESHOW CSS -->
 <style>
 #carousel img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 }
 #carousel img.active { opacity: 1; }
 </style>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>ePass</title>
+  <style>
+    @page { size: A4 portrait; margin: 40px 40px; }
+    body { font-family: Arial, Helvetica, sans-serif; color: #111; margin:0; padding:0; }
+    .page { width: 340px; height: 740px; margin: 0 auto; position: relative; background: #fff; border: 1px solid #ddd; box-shadow: 0 0 0 rgba(0,0,0,0); }
+
+    /* right red bar */
+    .right-bar {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 48px;
+      height: 100%;
+      background: #e13b34; /* red */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-size: 12px;
+    }
+
+    .content {
+      padding: 36px 20px 30px 36px;
+      box-sizing: border-box;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .logo {
+      display:block;
+      margin: 0 auto 8px auto;
+      max-width: 120px;
+      height: auto;
+    }
+    .small-note { font-size: 11px; color:#666; }
+
+    .pass-no {
+      margin-top: 8px;
+      margin-bottom: 18px;
+      font-weight:700;
+    }
+
+    .fields {
+      margin-top: 6px;
+      font-size: 14px;
+    }
+    .row {
+      display:flex;
+      align-items:center;
+      margin-bottom:14px;
+    }
+    .label {
+      width: 90px;
+      font-weight:700;
+      font-size:13px;
+    }
+    .value {
+      flex:1;
+      border-bottom: 1px solid #000;
+      padding: 4px 6px 2px 6px;
+      height:18px;
+      font-size:13px;
+    }
+
+    /* bus pass button box */
+    .bus-pass-box {
+      width:160px;
+      text-align:center;
+      border:2px solid #000;
+      font-weight:700;
+      padding:10px 0;
+      margin: 44px auto 10px auto;
+      letter-spacing:1px;
+    }
+
+    .signature {
+      margin-top:18px;
+      text-align:center;
+      font-size:12px;
+    }
+    .signature .line {
+      height:40px;
+      border-bottom:1px solid #000;
+      width:180px;
+      margin: 6px auto 4px auto;
+    }
+
+    /* ensure right-bar sits above content */
+    .page { position: relative; overflow: hidden; }
+    .right-bar { z-index: 5; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="right-bar">GENERAL SHIFT</div>
+
+    <div class="content">
+      <div class="header">
+        {% if logo_src %}
+          <img src="{{ logo_src }}" class="logo" alt="logo" />
+        {% else %}
+          <div style="font-size:18px;font-weight:800;">AEQUS</div>
+          <div class="small-note">ecosystems of efficiency</div>
+        {% endif %}
+      </div>
+
+      <div class="pass-no">No. <strong>{{ pass_no }}</strong></div>
+
+      <div class="fields">
+        <div class="row">
+          <div class="label">Name:</div>
+          <div class="value">{{ name }}</div>
+        </div>
+
+        <div class="row">
+          <div class="label">EID No.:</div>
+          <div class="value">{{ emp_id }}</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Entity:</div>
+          <div class="value">{{ entity }}</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Pickup/Drop:</div>
+          <div class="value">{{ pickup_drop_point|default:"—" }}</div>
+        </div>
+      </div>
+
+      <div class="bus-pass-box">BUS PASS</div>
+
+      <div class="signature">
+        <div class="line"></div>
+        <div>Officer Signature</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

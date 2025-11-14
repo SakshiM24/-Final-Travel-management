@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #f5f5f5;">
+
+  <h2 style="font-size: 28px; font-weight: 800; color: #1a1a1a; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">
+    Company Transport ePass
+  </h2>
+
+  <p style="color: #555; font-size: 14px; margin-bottom: 25px; text-align: center;">
+    Once approved by your officer, you will receive this bus pass through your email.
+  </p>
+
+  <div class="card">
+
+    <!-- LOGO + PHOTO -->
+    <div class="top-section">
+      <img src="{% static 'images/AEQUS_logo.svg.png' %}" alt="AEQUS Logo" class="logo">
+
+     
+    </div>
+
+    <div class="number">No. ______</div>
+
+    <div class="info">
+      <label>Name:</label><span class="blank"></span><br>
+      <label>EID No.:</label><span class="blank"></span><br>
+      <label>Entity:</label><span class="blank"></span><br>
+      <label>Pickup/Drop Point:</label><span class="blank"></span><br>
+    </div>
+
+    <div class="bus-pass">BUS PASS</div>
+    <div class="shift-bar">G E N E R A L          S H I F T</div>
+  </div>
+</div>
+
+<style>
+  .card {
+    position: relative;
+    width: 360px;
+    height: 550px;
+    background: #fff;
+    border: 2px solid #d1d1d1;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    padding: 25px;
+    box-sizing: border-box;
+  }
+
+  /* Top section layout */
+  .top-section {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .logo {
+    width: 125px;
+    height: auto;
+  }
+
+  .photo-box {
+    width: 85px;
+    height: 95px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #f9f9f9;
+  }
+
+  .photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .number {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    margin-top: 15px;
+    margin-bottom: 30px;
+  }
+
+  .shift-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 55px;
+    background-color: #e53935;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    letter-spacing: 1px;
+  }
+
+  .info {
+    font-size: 15px;
+    line-height: 32px;
+    margin-top: 10px;
+  }
+
+  .info label {
+    font-weight: bold;
+    display: inline-block;
+    width: 90px;
+  }
+
+  .info .blank {
+    display: inline-block;
+    border-bottom: 1px solid #000;
+    width: 180px;
+    height: 16px;
+    vertical-align: middle;
+  }
+
+  .bus-pass {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 2px solid #000;
+    font-weight: bold;
+    padding: 5px 15px;
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+</style>
+
+{% endblock %}

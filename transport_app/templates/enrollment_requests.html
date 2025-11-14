@@ -1,0 +1,140 @@
+{% extends 'admin_dashboard.html' %}
+{% block content %}
+<header class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Enrollment Requests</h1>
+</header>
+
+<!-- paste your ENROLLMENT SECTION code here exactly as it is -->
+
+<!-- ENROLLMENT --> 
+<section id="enroll-section" class="mb-10">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-lg font-semibold">Enrollment Requests</h2>
+
+    <!-- search -->
+    <form method="get" class="flex gap-2">
+      <input type="text" name="enroll_search" placeholder="Search name or emp id"
+             value="{{ request.GET.enroll_search|default:'' }}"
+             class="px-3 py-2 border rounded" />
+      <select name="enroll_role" class="px-3 py-2 border rounded">
+        <option value="">All roles</option>
+        <option value="Employee" {% if request.GET.enroll_role == 'Employee' %}selected{% endif %}>Employee</option>
+        <option value="Intern" {% if request.GET.enroll_role == 'Intern' %}selected{% endif %}>Intern</option>
+      </select>
+      <button type="submit" class="bg-blue-600 text-white px-3 py-2 rounded">Search</button>
+    </form>
+  </div>
+
+  <div class="bg-white shadow rounded-lg overflow-hidden">
+    <form id="csrf-form">{% csrf_token %}</form> <!--  Add CSRF here -->
+    <table class="min-w-full">
+      <thead class="bg-blue-100">
+        <tr>
+          <th class="text-left px-4 py-3">Name</th>
+          <th class="text-left px-4 py-3">Entity</th>
+          <th class="text-left px-4 py-3">Role</th>
+          <th class="text-left px-4 py-3">Emp ID</th>
+          <th class="text-left px-4 py-3">Applied</th>
+          <th class="text-left px-4 py-3">Status</th>
+          <th class="px-4 py-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in enrollment_requests %}
+        {% if r.id %}
+        <tr class="border-t enroll-row" data-id="{{ r.id }}">
+          <td class="px-4 py-3">{{ r.name }}</td>
+          <td class="px-4 py-3">{{ r.entity }}</td>
+          <td class="px-4 py-3">{{ r.role }}</td>
+          <td class="px-4 py-3">{{ r.emp_id|default:'—' }}</td>
+          <td class="px-4 py-3 text-sm text-gray-500">{{ r.applied_at|date:"d M Y H:i" }}</td>
+          <td class="px-4 py-3">
+            {% if r.status == 'Pending' %}
+              <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded">{{ r.status }}</span>
+            {% elif r.status == 'Accepted' %}
+              <span class="px-2 py-1 bg-green-100 text-green-800 rounded">{{ r.status }}</span>
+            {% else %}
+              <span class="px-2 py-1 bg-red-100 text-red-800 rounded">{{ r.status }}</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 flex gap-2">
+            <form action="{% url 'approve_employee' r.id %}" method="post">
+              {% csrf_token %}
+            <button data-status="Accepted"  class="action-btn px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">Accept</button>
+            </form>
+            <button data-status="Rejected" class="action-btn px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Reject</button>
+          </td>
+        </tr>
+        {% endif %}
+        {% empty %}
+        <tr><td colspan="7" class="p-4 text-center text-gray-500">No enrollment requests</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!--  Add this CSS + JS at bottom -->
+<style>
+  .disabled-btn {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .fade-out {
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".action-btn");
+  const csrfToken = document.querySelector("#csrf-form [name=csrfmiddlewaretoken]").value; // ✅ Fixed token source
+
+  buttons.forEach(button => {
+    button.addEventListener("click", function () {
+      const row = this.closest(".enroll-row");
+      const enrollmentId = row.getAttribute("data-id");
+      const status = this.getAttribute("data-status");
+
+      if (!enrollmentId) {
+        alert("Invalid record ID!");
+        return;
+      }
+
+      if (confirm(`Are you sure you want to mark this as ${status}?`)) {
+        row.querySelectorAll(".action-btn").forEach(btn => btn.classList.add("disabled-btn"));
+
+        fetch(`/enrollment/update/${enrollmentId}/`, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrfToken,
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: new URLSearchParams({ status: status })
+        })
+        .then(res => {
+          if (res.ok) {
+            row.classList.add("fade-out");
+            setTimeout(() => row.remove(), 400);
+          } else {
+            alert(" Something went wrong while updating.");
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert("⚠️ Network error. Please try again.");
+        });
+      }
+    });
+  });
+});
+</script>
+
+
+
+
+
+
+
+{% endblock %}

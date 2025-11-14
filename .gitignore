@@ -1,0 +1,14 @@
+venv/
+__pycache__/
+*.pyc
+*.sqlite3
+media/photos/
+media/epass/
+.env
+.DS_Store
+.idea/
+.vscode/
+*.log
+#settings.py
+#DS_Store
+

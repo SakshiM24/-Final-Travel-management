@@ -20,6 +20,7 @@ class BusForm(forms.ModelForm):
             'pickup_time': forms.TimeInput(attrs={
                 'type': 'time',
                 'class': 'w-full p-2 border rounded',
+                
             }),
             'drop_time': forms.TimeInput(attrs={
                 'type': 'time',
@@ -30,3 +31,17 @@ class BusForm(forms.ModelForm):
                 ('Inactive', 'Inactive'),
             ], attrs={'class': 'w-full p-2 border rounded'}),
         }
+
+from django import forms
+from .models import FAQQuestion
+
+class FAQQuestionForm(forms.ModelForm):
+    class Meta:
+        model = FAQQuestion
+        fields = ['name', 'email', 'question']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Enter your name', 'class': 'faq-input'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Enter your email', 'class': 'faq-input'}),
+            'question': forms.Textarea(attrs={'placeholder': 'Type your question...', 'class': 'faq-textarea', 'rows': 4}),
+        }
+

@@ -3,34 +3,42 @@
 {% block title %}Transport Exit Form{% endblock %}
 {% block content %}
 
-<section class="pt-28 pb-20 bg-gray-50 min-h-screen">
-  <div class="max-w-5xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200">
-    <div class="bg-red-700 text-white py-6 px-8 flex justify-between items-center">
+<!-- Background Section -->
+<section class="pt-24 pb-16 min-h-screen glass-bg flex items-center justify-center">
+  <div class="max-w-4xl mx-auto glass-form shadow-2xl rounded-2xl border border-gray-200 overflow-hidden transition hover:shadow-[0_10px_40px_rgba(0,0,0,0.2)] duration-300">
+    
+    <!-- Header -->
+    <div class="bg-[#8B0000]/90 backdrop-blur-md text-white py-5 px-8 flex justify-between items-center">
       <div>
-        <h2 class="text-3xl font-semibold tracking-wide">Company Bus Transport Exit Form</h2>
-        <p class="text-sm opacity-90">Fill in your details carefully. Once submitted, admin approval is required.</p>
+        <h2 class="text-2xl font-semibold tracking-wide flex items-center gap-2">
+          <i class="fa-solid fa-door-open"></i> Company Bus Exit Form
+        </h2>
+        <p class="text-xs opacity-90">Please fill carefully — Admin approval required after submission.</p>
       </div>
-      <img src="{% static 'images/AEQUS_logo.svg.png' %}" alt="Company Logo" class="w-16 h-16 square-full object-contain">
+      <img src="{% static 'images/AEQUS_logo.svg.png' %}" alt="Company Logo" class="w-14 h-14 rounded-lg object-contain bg-white p-2">
     </div>
 
-    <form method="POST" enctype="multipart/form-data" class="p-8 space-y-8">
+    <!-- Form -->
+    <form method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
       {% csrf_token %}
-      
-      <!-- Personal Information -->
+
+      <!-- Personal Info -->
       <div>
-        <h3 class="text-xl font-semibold text-red-700 mb-4 border-b border-red-200 pb-2">Personal Information</h3>
-        <div class="grid md:grid-cols-2 gap-6">
+        <h3 class="text-lg font-semibold text-[#8B0000] mb-2 flex items-center gap-2">
+          <i class="fa-solid fa-user"></i> Personal Information
+        </h3>
+        <div class="grid md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-gray-600 font-medium">Full Name</label>
-            <input type="text" name="employee_name" required class="w-full p-2 border rounded-lg focus:outline-red-600">
+            <label class="text-gray-700 text-sm font-medium">Full Name</label>
+            <input type="text" name="employee_name" required class="input-field">
           </div>
           <div>
-            <label class="block text-gray-600 font-medium">Date of Birth</label>
-            <input type="date" name="dob" required class="w-full p-2 border rounded-lg focus:outline-red-600">
+            <label class="text-gray-700 text-sm font-medium">Date of Birth</label>
+            <input type="date" name="dob" required class="input-field">
           </div>
           <div>
-            <label class="block text-gray-600 font-medium">Gender</label>
-            <select name="gender" required class="w-full p-2 border rounded-lg focus:outline-red-600">
+            <label class="text-gray-700 text-sm font-medium">Gender</label>
+            <select name="gender" required class="input-field">
               <option value="">Select Gender</option>
               <option>Male</option>
               <option>Female</option>
@@ -38,97 +46,96 @@
             </select>
           </div>
           <div>
-            <label class="block text-gray-600 font-medium">Contact Number</label>
-            <input type="text" name="contact_no" required class="w-full p-2 border rounded-lg focus:outline-red-600">
+            <label class="text-gray-700 text-sm font-medium">Contact Number</label>
+            <input type="text" name="contact_no" required class="input-field">
           </div>
         </div>
       </div>
 
-      <!-- Address Information -->
+      <!-- Address -->
       <div>
-        <h3 class="text-xl font-semibold text-red-700 mb-4 border-b border-red-200 pb-2">Address Information</h3>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-gray-600 font-medium">Present Address</label>
-            <textarea name="present_address" rows="3" class="w-full p-2 border rounded-lg focus:outline-red-600"></textarea>
-          </div>
-          <div>
-            <label class="block text-gray-600 font-medium">Permanent Address</label>
-            <textarea name="permanent_address" rows="3" class="w-full p-2 border rounded-lg focus:outline-red-600"></textarea>
-          </div>
+        <h3 class="text-lg font-semibold text-[#8B0000] mb-2 flex items-center gap-2">
+          <i class="fa-solid fa-location-dot"></i> Address Information
+        </h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <textarea name="present_address" rows="2" placeholder="Present Address" class="input-field"></textarea>
+          <textarea name="permanent_address" rows="2" placeholder="Permanent Address" class="input-field"></textarea>
         </div>
       </div>
 
-      <!-- Work Information -->
+      <!-- Work Info -->
       <div>
-        <h3 class="text-xl font-semibold text-red-700 mb-4 border-b border-red-200 pb-2">Work Information</h3>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-gray-600 font-medium">Entity</label>
-            <input type="text" name="entity" class="w-full p-2 border rounded-lg focus:outline-red-600">
-          </div>
+        <h3 class="text-lg font-semibold text-[#8B0000] mb-2 flex items-center gap-2">
+          <i class="fa-solid fa-briefcase"></i> Work Information
+        </h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <input type="text" name="entity" placeholder="Entity" class="input-field">
+          <input type="text" name="department" placeholder="Department" class="input-field">
+          <input type="text" name="designation" placeholder="Designation" class="input-field">
+          <input type="date" name="date_of_leaving" placeholder="Date of Leaving" class="input-field">
 
+          <select name="pickup_drop_point" class="input-field">
+            <option value="">Select Stop</option>
+            {% for s in stops %}
+              <option value="{{ s.id }}">{{ s.name }}</option>
+            {% endfor %}
+          </select>
 
-
-
-
-
-
-
-          <div>
-            <label class="block text-gray-600 font-medium">Department</label>
-            <input type="text" name="department" class="w-full p-2 border rounded-lg focus:outline-red-600">
-          </div>
-          <div>
-            <label class="block text-gray-600 font-medium">Designation</label>
-            <input type="text" name="designation" class="w-full p-2 border rounded-lg focus:outline-red-600">
-          </div>
-          <div>
-            <label class="block text-gray-600 font-medium">Date of Leaving</label>
-            <input type="date" name="date_of_leaving" class="w-full p-2 border rounded-lg focus:outline-red-600">
-          </div>
-          <div>
-          <select name="pickup_drop_point" class="...">
-  <option value="">Select stop</option>
-  {% for s in stops %}
-    <option value="{{ s.id }}">{{ s.name }}</option>
-  {% endfor %}
-</select>
-
-          </div>
-          <div>
-            <label class="block text-gray-600 font-medium">Bus No.</label>
-            <input type="text" name="bus_no" class="w-full p-2 border rounded-lg focus:outline-red-600">
-          </div>
-          <div>
-            <label class="block text-gray-600 font-medium">Bus Pass No.</label>
-            <input type="text" name="bus_pass_no" class="w-full p-2 border rounded-lg focus:outline-red-600">
-          </div>
-          <div class="md:col-span-2">
-            <label class="block text-gray-600 font-medium">Remarks (Optional)</label>
-            <textarea name="remarks" rows="3" class="w-full p-2 border rounded-lg focus:outline-red-600"></textarea>
-          </div>
+          <input type="text" name="bus_no" placeholder="Bus No." class="input-field">
+          <input type="text" name="bus_pass_no" placeholder="Bus Pass No." class="input-field">
+          <textarea name="remarks" rows="2" placeholder="Remarks (Optional)" class="input-field md:col-span-2"></textarea>
         </div>
       </div>
 
-      <!-- Rules -->
-      <div class="flex items-center justify-between border-t border-gray-200 pt-6">
-        <div class="flex items-center space-x-3">
-          <input type="checkbox" id="agree" name="agree" required>
-          <label for="agree" class="text-gray-700 text-sm">
-            I agree to the <a href="{% url 'rules' %}" class="text-red-600 hover:underline">company transport rules & regulations</a>.
-          </label>
-        </div>
+      <!-- Agreement -->
+      <div class="flex items-center gap-2 text-sm pt-3">
+        <input type="checkbox" id="agree" name="agree" required>
+        <label for="agree">
+          I agree to the 
+          <a href="{% url 'rules' %}" class="text-[#8B0000] underline hover:text-red-800">company transport rules & regulations</a>.
+        </label>
       </div>
 
       <!-- Submit -->
-      <div class="pt-6 text-center">
-        <button type="submit" class="bg-red-700 hover:bg-red-800 text-white font-semibold px-10 py-3 rounded-xl shadow-lg transition">
-          Submit Exit Request
+      <div class="text-center pt-4">
+        <button type="submit" class="bg-[#8B0000] hover:bg-[#A80000] text-white font-semibold px-8 py-2.5 rounded-lg shadow-md transition transform hover:scale-105">
+          <i class="fa-solid fa-paper-plane mr-1"></i> Submit Exit Request
         </button>
       </div>
     </form>
   </div>
 </section>
+
+<!-- Extra CSS -->
+<style>
+/*  Background with soft gradient */
+.glass-bg {
+  background: linear-gradient(135deg, #ffe4e1 0%, #f5f5f5 100%);
+}
+
+/*  Glassmorphism effect for form box */
+.glass-form {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Input styling */
+.input-field {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.8);
+}
+.input-field:focus {
+  border-color: #8B0000;
+  box-shadow: 0 0 6px rgba(139, 0, 0, 0.25);
+}
+</style>
 
 {% endblock %}

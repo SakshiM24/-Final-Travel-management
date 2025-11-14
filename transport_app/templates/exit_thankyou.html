@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Exit Request Submitted{% endblock %}
+{% block content %}
+
+<section class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#c9d6ff] to-[#e2e2e2] text-center p-6">
+
+  <div class="bg-white/70 backdrop-blur-lg shadow-2xl rounded-2xl p-10 border border-gray-200 max-w-md w-full">
+    
+    <!-- Success Tick -->
+    <div class="flex justify-center mb-4">
+      <div class="bg-green-500 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-md animate-pop">
+        <i class="fa-solid fa-check text-3xl"></i>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-2xl font-bold text-[#003B73] mb-2">Thank You!</h1>
+
+    <!-- Message -->
+    <p class="text-gray-600 mb-6">
+      Your <strong>Bus Exit Request</strong> has been submitted successfully.<br>
+      Once verified by the transport officer, you will be deactivated.
+    </p>
+
+    <!-- Return to Home -->
+    <a href="{% url 'home' %}" 
+       class="inline-block bg-[#003B73] hover:bg-[#004C99] text-white font-semibold px-6 py-2.5 rounded-lg shadow-md transition transform hover:scale-105">
+       <i class="fa-solid fa-house mr-1"></i> Return to Home
+    </a>
+  </div>
+</section>
+
+<!-- Optional small animation -->
+<style>
+@keyframes pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.animate-pop { animation: pop 0.5s ease-in-out; }
+</style>
+
+{% endblock %}
