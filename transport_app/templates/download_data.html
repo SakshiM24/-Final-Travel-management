@@ -1,0 +1,127 @@
+{% extends 'admin_dashboard.html' %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto mt-10">
+
+    <!-- Title -->
+    <div class="bg-white/70 backdrop-blur-md shadow-lg border border-gray-200 px-6 py-4 rounded-xl mb-6">
+        <h2 class="text-2xl font-semibold text-[#003B73] flex items-center gap-2">
+            <i class="fa fa-download"></i> Download Data
+        </h2>
+        
+        <p class="text-gray-600 text-sm mt-1">
+            Export CSV for Enrollment and Exit Request details.
+        </p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="bg-white/80 backdrop-blur-md shadow-md border border-gray-200 rounded-xl p-6 space-y-6">
+
+        <!-- Enrollment Section -->
+        <div>
+            <h3 class="text-lg font-bold text-[#003B73] mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-user-check"></i> Enrollment Data
+            </h3>
+
+            <div class="space-y-3">
+                <a href="{% url 'export_enrollment_csv' 'Accepted' %}" 
+                   class="download-btn">Download Accepted Enrollment</a>
+
+                <a href="{% url 'export_enrollment_csv' 'Pending' %}" 
+                   class="download-btn">Download Pending Enrollment</a>
+
+                <a href="{% url 'export_enrollment_csv' 'Rejected' %}" 
+                   class="download-btn">Download Rejected Enrollment</a>
+            </div>
+        </div>
+
+        <hr class="border-gray-300">
+
+        <!-- Enrollment by Stop -->
+        <div>
+            <h3 class="text-lg font-bold text-[#003B73] mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-location-dot"></i> Enrollment by Pickup/Drop Point
+            </h3>
+
+            <form method="get" onsubmit="return goToStopDownload()" class="flex gap-3">
+                <select id="stopSelect" class="input-field w-64" required>
+                    <option value="">Select Pickup/Drop Point</option>
+                    {% for s in stops %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit" 
+                    class="bg-[#003B73] text-white px-4 py-2 rounded-lg hover:bg-[#00498c] transition">
+                    Download CSV
+                </button>
+            </form>
+        </div>
+
+        <hr class="border-gray-300">
+
+        <!-- Exit Section -->
+        <div>
+            <h3 class="text-lg font-bold text-[#003B73] mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-door-open"></i> Exit Request Data
+            </h3>
+
+            <div class="space-y-3">
+                <a href="{% url 'export_exit_csv' 'Accepted' %}" 
+                   class="download-btn">Download Accepted Exit</a>
+
+                <a href="{% url 'export_exit_csv' 'Pending' %}" 
+                   class="download-btn">Download Pending Exit</a>
+
+                <a href="{% url 'export_exit_csv' 'Rejected' %}" 
+                   class="download-btn">Download Rejected Exit</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<style>
+    .download-btn {
+        display: block;
+        background: #f9fafb;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid #dbe2e8;
+        font-weight: 500;
+        color: #003B73;
+        transition: 0.2s;
+        width: 100%;
+    }
+
+    .download-btn:hover {
+        background: #eaf3ff;
+        border-color: #003B73;
+    }
+
+    .input-field {
+        border: 1px solid #cbd5e1;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: white;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #003B73;
+        box-shadow: 0 0 5px rgba(0, 59, 115, 0.25);
+    }
+</style>
+
+<script>
+    function goToStopDownload() {
+        let id = document.getElementById("stopSelect").value;
+        if (!id) return false;
+        window.location.href = "/export/enrollment/stop/" + id + "/";
+        return false;
+    }
+</script>
+
+{% endblock %}

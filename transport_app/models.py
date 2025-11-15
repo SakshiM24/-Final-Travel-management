@@ -38,7 +38,7 @@ class Bus(models.Model):
 # 3️ Enrollment Request Model
 # --------------------------
 class EnrollmentRequest(models.Model):
-    ROLE_CHOICES = [('Employee', 'Employee'), ('Intern', 'Intern')]
+    ROLE_CHOICES = [('Employee', 'Employee'), ('Other', 'Other')]
     STATUS_CHOICES = [('Pending', 'Pending'), ('Accepted', 'Accepted'), ('Rejected', 'Rejected')]
 
     name = models.CharField(max_length=100)
@@ -53,6 +53,8 @@ class EnrollmentRequest(models.Model):
     entity = models.CharField(max_length=100)
     department = models.CharField(max_length=100)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    sub_role = models.CharField(max_length=50, blank=True, null=True)
+
     emp_id = models.CharField(max_length=50, blank=True, null=True)
     designation = models.CharField(max_length=100, blank=True, null=True)
     date_of_joining = models.DateField()
@@ -64,7 +66,13 @@ class EnrollmentRequest(models.Model):
 
 
     def __str__(self):
-        return f"{self.name} ({self.role}) - {self.status}"
+        return f"{self.name} - {self.display_role()}"
+
+    def display_role(self):
+        if self.role == "Employee":
+            return "Employee"
+        else:
+            return self.sub_role or "Other"
 
 
 # --------------------------

@@ -84,4 +84,30 @@ path('manage-logins/delete/<int:pk>/', views.delete_admin, name='delete_admin'),
 path("ask_question/", views.ask_question, name="ask_question"),
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ path('download-data/', views.download_data_view, name='download_data'),
+
+    # Enrollment exports
+    path('export/enrollment/<str:status>/', views.export_enrollment_csv, name='export_enrollment_csv'),
+    path('export/enrollment/stop/<int:stop_id>/', views.export_enrollment_by_stop, name='export_enrollment_by_stop'),
+
+    # Exit exports
+    path('export/exit/<str:status>/', views.export_exit_csv, name='export_exit_csv'),
+
 ]

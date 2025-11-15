@@ -81,23 +81,41 @@
           <i class="fa-solid fa-briefcase"></i> Work Information
         </h3>
         <div class="grid md:grid-cols-2 gap-4">
+
           <input type="text" name="entity" placeholder="Entity" class="input-field">
           <input type="text" name="department" placeholder="Department" class="input-field">
 
           <select name="role" id="role" required class="input-field" onchange="toggleEmpFields()">
             <option value="">Select Role</option>
             <option value="Employee">Employee</option>
-            <option value="Intern">Intern</option>
+            <option value="Other">Other</option>
           </select>
 
+          <!-- Employee-only fields -->
           <div id="empIdField">
             <input type="text" name="emp_id" id="emp_id" placeholder="Employee ID" class="input-field">
           </div>
+
           <div id="designationField">
             <input type="text" name="designation" id="designation" placeholder="Designation" class="input-field">
           </div>
 
-          <input type="date" name="date_of_joining" class="input-field">
+          <!-- OTHER ROLE dropdown -->
+          <div id="subRoleField" class="hidden">
+            <label class="text-gray-700 text-sm font-medium">Select Sub Role</label>
+            <select name="sub_role" class="input-field">
+              <option value="">Select Sub Role</option>
+              <option>Intern</option>
+              <option>Consultant</option>
+              <option>Audit</option>
+              <option>Visitor</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-700 text-sm font-medium">Date of Joining</label>
+            <input type="date" name="date_of_joining" class="input-field">
+          </div>
 
           <select name="pickup_drop_point" class="input-field">
             <option value="">Select Pickup/Drop Point</option>
@@ -134,12 +152,10 @@
 
 <!-- Extra CSS -->
 <style>
-/*  Background with soft gradient */
 .glass-bg {
   background: linear-gradient(135deg, #c9d6ff 0%, #e2e2e2 100%);
 }
 
-/* ✨ Glassmorphism effect for form box */
 .glass-form {
   background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(12px);
@@ -147,7 +163,6 @@
   border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-/* Input styling */
 .input-field {
   width: 100%;
   padding: 8px 10px;
@@ -158,6 +173,7 @@
   transition: all 0.2s ease;
   background: rgba(255, 255, 255, 0.8);
 }
+
 .input-field:focus {
   border-color: #003B73;
   box-shadow: 0 0 6px rgba(0, 59, 115, 0.25);
@@ -167,14 +183,25 @@
 <script>
 function toggleEmpFields() {
   const role = document.getElementById('role').value;
+
   const empId = document.getElementById('empIdField');
   const desig = document.getElementById('designationField');
-  if (role === 'Intern') {
-    empId.classList.add('hidden');
-    desig.classList.add('hidden');
-  } else {
-    empId.classList.remove('hidden');
-    desig.classList.remove('hidden');
+  const subRole = document.getElementById('subRoleField');
+
+  if (role === 'Employee') {
+      empId.classList.remove('hidden');
+      desig.classList.remove('hidden');
+      subRole.classList.add('hidden');
+  } 
+  else if (role === 'Other') {
+      empId.classList.add('hidden');
+      desig.classList.add('hidden');
+      subRole.classList.remove('hidden');
+  } 
+  else {
+      empId.classList.add('hidden');
+      desig.classList.add('hidden');
+      subRole.classList.add('hidden');
   }
 }
 </script>

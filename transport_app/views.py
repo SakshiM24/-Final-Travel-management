@@ -51,6 +51,7 @@ def enroll(request):
             entity=request.POST['entity'],
             department=request.POST['department'],
             role=request.POST['role'],
+            sub_role=request.POST.get('sub_role'), 
             emp_id=request.POST.get('emp_id'),
             designation=request.POST.get('designation'),
             date_of_joining=request.POST['date_of_joining'],
@@ -291,7 +292,7 @@ def update_enrollment_status(request, pk):
 
 
  #-------- Exit Status Update -------- 
-@csrf_exempt  #  allow JS POST
+@csrf_exempt
 def update_exit_status(request, pk):
     if request.method != "POST":
         return JsonResponse({"error": "Invalid request"}, status=400)
@@ -306,23 +307,26 @@ def update_exit_status(request, pk):
     if status not in ("Pending", "Accepted", "Rejected"):
         return JsonResponse({"error": "Invalid status"}, status=400)
 
-    #  update status
+    # Update exit request status
     req.status = status
     req.save()
 
-    #  log action (optional)
+    # -------- NEW LOGIC --------
+    if status == "Accepted":
+        # Match enrollment using pass number (SAFE & UNIQUE)
+        try:
+            enroll = EnrollmentRequest.objects.get(pass_no=req.bus_pass_no)
+            enroll.delete()     # ← COMPLETELY REMOVE ENROLLMENT
+        except EnrollmentRequest.DoesNotExist:
+            pass  # No matching enrollment found, continue safely
+
+    # Log action
     ActionLog.objects.create(
-        action=f"Exit status updated for {req.name} to {status}",
+        action=f"Exit status updated for {req.employee_name} to {status}",
         performed_by="Admin",
     )
 
     return JsonResponse({"success": True, "status": status})
-
-
-
-
-
-
 
 
 # -------- Bus Management --------
@@ -526,3 +530,179 @@ def approve_employee(request, employee_id):
             messages.error(request, f"Approved but email failed: {e}")
 
         return redirect("admin_dashboard")
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import csv
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import render
+
+from .models import EnrollmentRequest, ExitRequest, Stop
+
+# Admin-only decorator helper
+def admin_only(func):
+   return func  # Placeholder for actual admin check
+
+# ----------------- Download page -----------------
+
+@admin_only
+def download_data_view(request):
+    stops = Stop.objects.all().order_by('name')
+    return render(request, "download_data.html", {"stops": stops})
+
+# ----------------- Enrollment CSV by status -----------------
+
+@admin_only
+def export_enrollment_csv(request, status):
+    status = status.capitalize()
+    valid = ["Accepted", "Pending", "Rejected"]
+    if status not in valid:
+        return HttpResponse("Invalid status", status=400)
+
+    qs = EnrollmentRequest.objects.filter(status=status)
+
+    filename = f"enrollment_{status.lower()}.csv"
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    writer = csv.writer(response)
+    # Header row — all model fields you asked
+    writer.writerow([
+        "id","name","dob","gender","email","contact_no","alternate_no",
+        "present_address","permanent_address","entity","department",
+        "role","sub_role","emp_id","designation","date_of_joining",
+        "pickup_drop_point_id","pickup_drop_point_name",
+        "working_type","status","applied_at","pass_no","photo_path"
+    ])
+
+    for o in qs:
+        writer.writerow([
+            o.id,
+            o.name,
+            o.dob.isoformat() if o.dob else "",
+            o.gender or "",
+            o.email or "",
+            o.contact_no or "",
+            o.alternate_no or "",
+            o.present_address or "",
+            o.permanent_address or "",
+            o.entity or "",
+            o.department or "",
+            o.role or "",
+            o.sub_role or "",
+            o.emp_id or "",
+            o.designation or "",
+            o.date_of_joining.isoformat() if getattr(o, "date_of_joining", None) else "",
+            o.pickup_drop_point.id if o.pickup_drop_point else "",
+            o.pickup_drop_point.name if o.pickup_drop_point else "",
+            o.working_type or "",
+            o.status or "",
+            o.applied_at.strftime("%Y-%m-%d %H:%M:%S") if getattr(o, "applied_at", None) else "",
+            o.pass_no or "",
+            (o.photo.url if getattr(o, "photo", None) and getattr(o.photo, "url", None) else "")
+        ])
+
+    return response
+
+# ----------------- Enrollment CSV by stop (Accepted only) -----------------
+
+@admin_only
+def export_enrollment_by_stop(request, stop_id):
+    qs = EnrollmentRequest.objects.filter(pickup_drop_point_id=stop_id, status="Accepted")
+
+    filename = f"enrollment_stop_{stop_id}.csv"
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "id","name","email","contact_no","entity","department","role","sub_role",
+        "emp_id","designation","date_of_joining","pickup_drop_point_id","pickup_drop_point_name",
+        "pass_no","status","applied_at"
+    ])
+
+    for o in qs:
+        writer.writerow([
+            o.id,
+            o.name,
+            o.email or "",
+            o.contact_no or "",
+            o.entity or "",
+            o.department or "",
+            o.role or "",
+            o.sub_role or "",
+            o.emp_id or "",
+            o.designation or "",
+            o.date_of_joining.isoformat() if getattr(o, "date_of_joining", None) else "",
+            o.pickup_drop_point.id if o.pickup_drop_point else "",
+            o.pickup_drop_point.name if o.pickup_drop_point else "",
+            o.pass_no or "",
+            o.status or "",
+            o.applied_at.strftime("%Y-%m-%d %H:%M:%S") if getattr(o, "applied_at", None) else "",
+        ])
+    return response
+
+# ----------------- Exit CSV by status -----------------
+
+@admin_only
+def export_exit_csv(request, status):
+    status = status.capitalize()
+    valid = ["Accepted", "Pending", "Rejected"]
+    if status not in valid:
+        return HttpResponse("Invalid status", status=400)
+
+    qs = ExitRequest.objects.filter(status=status)
+
+    filename = f"exit_{status.lower()}.csv"
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "id","employee_name","dob","gender","contact_no","present_address","permanent_address",
+        "entity","department","designation","date_of_leaving",
+        "pickup_drop_point_id","pickup_drop_point_name",
+        "bus_no","bus_pass_no","remarks","status","applied_at"
+    ])
+
+    for o in qs:
+        writer.writerow([
+            o.id,
+            o.employee_name,
+            o.dob.isoformat() if o.dob else "",
+            o.gender or "",
+            o.contact_no or "",
+            o.present_address or "",
+            o.permanent_address or "",
+            o.entity or "",
+            o.department or "",
+            o.designation or "",
+            o.date_of_leaving.isoformat() if getattr(o, "date_of_leaving", None) else "",
+            o.pickup_drop_point.id if o.pickup_drop_point else "",
+            o.pickup_drop_point.name if o.pickup_drop_point else "",
+            o.bus_no or "",
+            o.bus_pass_no or "",
+            o.remarks or "",
+            o.status or "",
+            o.applied_at.strftime("%Y-%m-%d %H:%M:%S") if getattr(o, "applied_at", None) else ""
+        ])
+    return response
+
